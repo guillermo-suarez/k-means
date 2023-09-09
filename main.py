@@ -130,11 +130,11 @@ plt.legend()
 # En otro gráfico mostramos como quedarían los clusters después de la Iteración 1
 plt.subplot(1, 2, 2)
 plt.gca().set_facecolor((0, 0, 0, 0.75))
-for i in range (len(centroides)):
-    plt.scatter(centroides[i][0], centroides[i][1], label='Centroide ' + str(i + 1), color=colores[i], s=100.0, edgecolors='black')
 for i in range(len(clustersCords)):
     # print('Clúster ' + str(i + 1) + ' tiene ' + str(len(clustersCords[i][0])) + ' valores de eje X y ' + str(len(clustersCords[i][1])) + ' valores de eje Y.')
     plt.scatter(clustersCords[i][0], clustersCords[i][1], label='Punto del clúster ' + str(i + 1), color=(colores[i]), s=20.0, edgecolors='black')
+for i in range (len(centroides)):
+    plt.scatter(centroides[i][0], centroides[i][1], label='Centroide ' + str(i + 1), color=colores[i], s=100.0, edgecolors='black')
 plt.xlim(limMinX, limMaxX)
 plt.ylim(limMinY, limMaxY)
 plt.xlabel('Eje X')
