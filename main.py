@@ -3,7 +3,7 @@ import random
 import math as m
 import matplotlib.pyplot as plt
 
-# Cantidad de clusters
+# Cantidad de clusters (1 < k < 6)
 k = 5
 
 with open("Datasets/dataset_1.csv", 'r') as dataset:
@@ -15,6 +15,7 @@ puntos = []
 puntosX = []
 puntosY = []
 
+# Pasar a float
 for punto in puntosCSV:
     x, y = punto[0], punto[1]
     x = float(x.replace(',', '.'))
