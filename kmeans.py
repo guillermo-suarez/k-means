@@ -25,7 +25,7 @@ def kMeans(k, puntos, centroides):
         # Para cada punto...
         for punto in puntos:
             nroClusterActual = punto[2]
-            distanciaActual = punto[3]
+            distanciaActual = 10000.0
 
             # ...calculamos las distancias con todos los otros centroides
             distancias = []
