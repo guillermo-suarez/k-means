@@ -1,7 +1,7 @@
 import copy
 import random as rnd
 
-from funciones import calcularDistancia, actualizarCentroides, separarPorClusters
+from funciones import calcularDistancia, actualizarCentroide, separarPorClusters
 
 def marcarCentroidesAleatorios(k, puntos):
     centroides = []
@@ -13,45 +13,34 @@ def marcarCentroidesAleatorios(k, puntos):
     return centroides, puntos
 
 def kMeans(k, puntos, centroides):
-
     iteraciones = []
-
     puntosQueCambiaron = 1
-
     while puntosQueCambiaron > 0:
-
         puntosQueCambiaron = 0
-
         # Para cada punto...
         for punto in puntos:
-            nroClusterActual = punto[2]
-            distanciaActual = 10000.0
-
             # ...calculamos las distancias con todos los otros centroides
-            distancias = []
-            for centroide in centroides:
-                distancia = calcularDistancia(centroide, punto)
-                distancias.append(distancia)
-
-            # Buscamos, entre todas esas distancias, la más chica que, además, sea menor a la actual
+            distancias = [calcularDistancia(centroide, punto) for centroide in centroides]
+            # Buscamos, entre todas esas distancias, la más chica e identificamos a que clúster ahora pertenecería el punto
             for j, distancia in enumerate(distancias):
-                if distancia < distanciaActual:
-                    distanciaActual = distancia
-                    nroClusterActual = j + 1
-            
-            # Si va a cambiar el Nº de cluster, se aumenta en 1 el contador de puntos que cambiaron de cluster
-            if nroClusterActual != punto[2]:
+                if distancia == min(distancias):
+                    nroClusterMin = j + 1
+            # Si va a cambiar el Nº de cluster al que pertenece el punto, se aumenta en 1 el contador de puntos que cambiaron de cluster
+            if nroClusterMin != punto[2]:
                 puntosQueCambiaron = puntosQueCambiaron + 1
-
-            # Se reemplazan los valores
-            punto[2] = nroClusterActual
-            punto[3] = distanciaActual
-        
-        iteracion = []
-        iteracion.append(copy.deepcopy(centroides))
-        iteracion.append(copy.deepcopy(puntos))
+            # Se reemplaza en que cluster está
+            punto[2] = nroClusterMin
+        # Después de terminar la iteración...
+        # Se crea una copia de todos los centroides
+        centroidesIteracion = copy.deepcopy(centroides)
+        # Además, se crea una copia de todos los puntos con sus Nº de clúster actualizados
+        puntosIteracion = copy.deepcopy(puntos)
+        # Y se los divide en clústers
+        clustersIteracion = separarPorClusters(k, puntosIteracion)
+        # Ahora sí, creamos la iteración y la agregamos a la lista de iteraciones
+        iteracion = [centroidesIteracion, clustersIteracion, puntosQueCambiaron]
         iteraciones.append(iteracion)
+        # Si al menos 1 punto cambió de cluster, se actualizan los centroides
         if puntosQueCambiaron > 0:
-            centroides = actualizarCentroides(k, puntos)
-
-    return list(iteraciones)
+            centroides = [actualizarCentroide(cluster, centroides[i]) for i, cluster in enumerate(separarPorClusters(k, puntos))]
+    return copy.deepcopy(iteraciones)
