@@ -12,6 +12,42 @@ def marcarCentroidesAleatorios(k, puntos):
         puntos[j][2] = i + 1
     return centroides, puntos
 
+def marcarCentroidesHeuristica(k, puntos):
+    centroides = []
+    n = len(puntos)
+    #Primero seleccionamos un punto aleatorio
+    j = rnd.randint(0, n - 1)
+    centroides.append([puntos[j][0], puntos[j][1]])
+    puntos[j][2] = 1
+    for i in range(k-1):        
+        distancias_minimas = []
+        for j, punto in enumerate(puntos):
+            distancia_minima = float('inf')
+            for centroide in centroides:
+                distancia = calcularDistancia(centroide, punto)
+                distancia_minima = min(distancia_minima, distancia)
+            distancias_minimas.append(distancia_minima)
+
+        # Calculamos la probabilidad ponderada para elegir el siguiente centroide
+
+        total_distancias_minimas = sum(distancias_minimas)
+        # Normalizamos las probabilidades
+        probabilidades = [d / total_distancias_minimas for d in distancias_minimas]        
+        pto = None
+        while pto is None:
+            # Seleccionamos un punto basado en las probabilidades normalizadas (0, 1)
+            seleccionado = rnd.uniform(0, 1)
+            acumulado = 0
+            for i, probabilidad in enumerate(probabilidades):
+                acumulado += probabilidad
+                # Verificamos si el valor acumulado de las probabilidades supera o iguala el valor aleatorio seleccionado. 
+                if acumulado >= seleccionado:
+                    pto = i
+                    break        
+        centroides.append([puntos[pto][0], puntos[pto][1]])
+        puntos[pto][2] = i + 1
+    return centroides, puntos
+
 def kMeans(k, puntos, centroides):
     iteraciones = []
     puntosQueCambiaron = 1
