@@ -28,23 +28,8 @@ def marcarCentroidesHeuristica(k, puntos):
                 distancia = calcularDistancia(centroide, punto)
                 distancia_minima = min(distancia_minima, distancia)
             distancias_minimas.append(distancia_minima)
-
-        # Calculamos la probabilidad ponderada para elegir el siguiente centroide
-
-        total_distancias_minimas = sum(distancias_minimas)
-        # Normalizamos las probabilidades
-        probabilidades = [d / total_distancias_minimas for d in distancias_minimas]        
-        pto = None
-        while pto is None:
-            # Seleccionamos un punto basado en las probabilidades normalizadas (0, 1)
-            seleccionado = rnd.uniform(0, 1)
-            acumulado = 0
-            for i, probabilidad in enumerate(probabilidades):
-                acumulado += probabilidad
-                # Verificamos si el valor acumulado de las probabilidades supera o iguala el valor aleatorio seleccionado. 
-                if acumulado >= seleccionado:
-                    pto = i
-                    break        
+        #Seleccionamos el punto con mayor distancia al centroide    
+        pto = distancias_minimas.index(max(distancias_minimas)) 
         centroides.append([puntos[pto][0], puntos[pto][1]])
         puntos[pto][2] = i + 1
     return centroides, puntos
