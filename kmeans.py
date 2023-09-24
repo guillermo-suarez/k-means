@@ -20,6 +20,7 @@ def marcarCentroidesHeuristica(k, puntos):
     centroides.append([puntos[j][0], puntos[j][1]])
     puntos[j][2] = 1
     for i in range(k-1):        
+        # Calculamos los siguientes centroides a partir de las distancias mínimas:
         distancias_minimas = []
         for j, punto in enumerate(puntos):
             distancia_minima = float('inf')
