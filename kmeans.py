@@ -12,14 +12,14 @@ def marcarCentroidesAleatorios(k, puntos):
         puntos[j][2] = i + 1
     return centroides, puntos
 
-def marcarCentroidesHeuristica(k, puntos):
+def marcarCentroidesKMPP(k, puntos):
     centroides = []
     n = len(puntos)
     #Primero seleccionamos un punto aleatorio
     j = rnd.randint(0, n - 1)
     centroides.append([puntos[j][0], puntos[j][1]])
     puntos[j][2] = 1
-    for i in range(k-1):        
+    for i in range(k - 1):        
         # Calculamos los siguientes centroides a partir de las distancias mínimas:
         distancias_minimas = []
         for j, punto in enumerate(puntos):
@@ -32,6 +32,38 @@ def marcarCentroidesHeuristica(k, puntos):
         pto = distancias_minimas.index(max(distancias_minimas)) 
         centroides.append([puntos[pto][0], puntos[pto][1]])
         puntos[pto][2] = i + 1
+    return centroides, puntos
+
+def marcarCentroidesSMD(k, puntos):
+    centroides = []
+    n = len(puntos)
+    # Se selecciona el punto inicial, este puede ser el punto medio del dataset o un punto aleatorio
+    # puntoInicial = actualizarCentroide(puntos, None)
+    j = rnd.randint(0, n - 1)
+    puntoInicial = [puntos[j][0], puntos[j][1]]
+    centroides.append(puntoInicial)
+    # Se itera k veces
+    for i in range(2, k + 1):
+        distanciasAcumuladas = []
+        # A cada punto
+        for punto in puntos:
+            distanciaAcumulada = 0.0
+            # Acumulamos la distancia que tiene al punto inicial
+            # distanciaAcumulada = calcularDistancia(puntoInicial, punto)
+            # Y acumulamos la distancia que tiene a cada centroide que se haya elegido hasta el momento
+            for centroide in centroides:
+                distancia = calcularDistancia(centroide, punto)
+                # Si la distancia es 0, quiere decir que ese punto ya es un centroide, entonces su sumatoria total será igual a 0
+                if distancia == 0.0:
+                    distanciaAcumulada = 0.0
+                    break
+                else:
+                    distanciaAcumulada = distanciaAcumulada + distancia
+            distanciasAcumuladas.append(distanciaAcumulada)
+        # Seleccionamos el punto con mayor distancia acumulada
+        ind = distanciasAcumuladas.index(max(distanciasAcumuladas))
+        centroides.append([puntos[ind][0], puntos[ind][1]])
+        puntos[ind][2] = i
     return centroides, puntos
 
 def kMeans(k, puntos, centroides):

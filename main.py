@@ -1,11 +1,13 @@
 from funciones import abrirCSV
-from kmeans import marcarCentroidesAleatorios, marcarCentroidesHeuristica, kMeans
+from kmeans import marcarCentroidesAleatorios, marcarCentroidesKMPP, marcarCentroidesSMD, kMeans
 
 import matplotlib.pyplot as plt
 
-k = 3
-puntos = abrirCSV('Datasets/dataset_2.csv')
-centroides, puntos = marcarCentroidesHeuristica(k, puntos)
+k = 5
+puntos = abrirCSV('Datasets/dataset_1.csv')
+# centroides, puntos = marcarCentroidesAleatorios(k, puntos)
+# centroides, puntos = marcarCentroidesKMPP(k, puntos)
+centroides, puntos = marcarCentroidesSMD(k, puntos)
 iteraciones = kMeans(k, puntos, centroides)
 
 # Se buscan los máximos y mínimos por eje
@@ -36,15 +38,15 @@ x = [punto[0] for punto in puntos]
 y = [punto[1] for punto in puntos]
 plt.scatter(x, y, label = 'Punto sin asignar' , color = [1, 1, 1], s = 20.0, edgecolors = 'black')
 for h, centroide in enumerate(centroides):
-        x = centroide[0]
-        y = centroide[1]
-        plt.scatter(x, y, label = 'Centroide ' + str(h + 1), color = colores[h], s = 100.0, edgecolors = 'black')
+    x = centroide[0]
+    y = centroide[1]
+    plt.scatter(x, y, label = 'Centroide ' + str(h + 1), color = colores[h], s = 100.0, edgecolors = 'black')
 plt.xlabel('Eje X')
 plt.ylabel('Eje Y')
 plt.xlim(limMinX, limMaxX)
 plt.ylim(limMinY, limMaxY)
 plt.title('Estado inicial')
-plt.legend(loc='upper left', bbox_to_anchor=(1, 1))
+plt.legend(loc = 'upper left', bbox_to_anchor = (1, 1))
 plt.tight_layout()
 plt.show(block = False)
 
@@ -66,7 +68,7 @@ for i, iteracion in enumerate(iteraciones):
     plt.ylabel('Eje Y')
     plt.xlim(limMinX, limMaxX)
     plt.ylim(limMinY, limMaxY)
-    plt.legend(loc='upper left', bbox_to_anchor=(1, 1))
+    plt.legend(loc = 'upper left', bbox_to_anchor = (1, 1))
     plt.title('Iteración ' + str(i + 1) + '.\nEn esta iteración ' + str(cambiaron) + ' puntos cambiaron de clúster')
     plt.tight_layout()
     plt.show(block = False)
