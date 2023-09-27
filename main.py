@@ -1,11 +1,11 @@
 from funciones import abrirCSV
-from kmeans import marcarCentroidesAleatorios, kMeans
+from kmeans import marcarCentroidesAleatorios, marcarCentroidesHeuristica, kMeans
 
 import matplotlib.pyplot as plt
 
-k = 5
-puntos = abrirCSV('Datasets/dataset_1.csv')
-centroides, puntos = marcarCentroidesAleatorios(k, puntos)
+k = 3
+puntos = abrirCSV('Datasets/dataset_2.csv')
+centroides, puntos = marcarCentroidesHeuristica(k, puntos)
 iteraciones = kMeans(k, puntos, centroides)
 
 # Se buscan los máximos y mínimos por eje
