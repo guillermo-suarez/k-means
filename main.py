@@ -1,12 +1,13 @@
-from funciones import abrirCSV
+from funciones import abrirCSV, separarPorClusters
 from kmeans import marcarCentroidesAleatorios, marcarCentroidesHeuristica, kMeans
 
 import matplotlib.pyplot as plt
 
-k = 3
-puntos = abrirCSV('Datasets/dataset_2.csv')
-centroides, puntos = marcarCentroidesHeuristica(k, puntos)
-iteraciones = kMeans(k, puntos, centroides)
+k = 5
+puntos, etiquetas = abrirCSV('Datasets/dataset_3.csv')
+# centroides, puntos, etiquetas = marcarCentroidesAleatorios(k, puntos, etiquetas)
+centroides, puntos, etiquetas = marcarCentroidesHeuristica(k, puntos, etiquetas)
+iteraciones = kMeans(k, puntos, etiquetas, centroides)
 
 # Se buscan los máximos y mínimos por eje
 minX = min([punto[0] for punto in puntos])
@@ -52,8 +53,10 @@ plt.show(block = False)
 for i, iteracion in enumerate(iteraciones):
     plt.figure()
     centroides = iteracion[0]
-    clusters = iteracion[1]
+    etiquetas = iteracion[1]
     cambiaron = iteracion[2]
+    chScore = iteracion[3]
+    clusters = separarPorClusters(k, puntos, etiquetas)
     for j, cluster in enumerate(clusters):
         x = [punto[0] for punto in cluster]
         y = [punto[1] for punto in cluster]
@@ -67,7 +70,7 @@ for i, iteracion in enumerate(iteraciones):
     plt.xlim(limMinX, limMaxX)
     plt.ylim(limMinY, limMaxY)
     plt.legend(loc='upper left', bbox_to_anchor=(1, 1))
-    plt.title('Iteración ' + str(i + 1) + '.\nEn esta iteración ' + str(cambiaron) + ' puntos cambiaron de clúster')
+    plt.title('Iteración ' + str(i + 1) + '.\nEn esta iteración ' + str(cambiaron) + ' puntos cambiaron de clúster.\nCalinski-Harabasz score: ' + ("%.2f" % chScore))
     plt.tight_layout()
     plt.show(block = False)
 plt.show()
