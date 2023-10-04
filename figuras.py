@@ -3,8 +3,7 @@ from funciones import abrirCSV
 import matplotlib.pyplot as plt
 
 def estadoInicial(csv):
-    print(csv)
-    puntos = abrirCSV('Datasets/dataset_'+str(csv)+'.csv')
+    puntos = abrirCSV(csv)
     minX = min([punto[0] for punto in puntos])
     maxX = max([punto[0] for punto in puntos])
     minY = min([punto[1] for punto in puntos])
