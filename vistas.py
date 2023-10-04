@@ -96,9 +96,18 @@ def make_inicio():
             file_path = values['file_path']
             if file_path:
                 fig = estadoInicial(file_path)
-                print(fig)
                 if fig_canvas_agg != None:
                     fig_canvas_agg.get_tk_widget().pack_forget()  # Remove the previous figure
                 fig_canvas_agg = FigureCanvasTkAgg(fig, canvas)
-                fig_canvas_agg.get_tk_widget().pack(side='top', fill='both', expand=1) 
+                fig_canvas_agg.get_tk_widget().pack(side='top', fill='both', expand=1)         
+        elif event == 'Iniciar': 
+            k_mapping = {'k2': 2, 'k3': 3, 'k4': 4, 'k5': 5}
+            selected_k_key = [key for key in k_mapping.keys() if values[key]][0]
+            selected_k = k_mapping[selected_k_key]
+            inicializacion_mapping = {'iA': 'Aleatoria', 'iH': 'Heurística'}
+            selected_inicializacion_key = [key for key in inicializacion_mapping.keys() if values[key]][0]
+            selected_inicializacion = inicializacion_mapping[selected_inicializacion_key]
+            
+            print(f'Selected K: {selected_k}')
+            print(f'Selected Inicialización: {selected_inicializacion}')
     window.close()
