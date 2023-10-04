@@ -1,7 +1,10 @@
-from funciones import abrirCSV
-from kmeans import marcarCentroidesAleatorios, marcarCentroidesHeuristica, kMeans
+""" from funciones import abrirCSV
+from kmeans import marcarCentroidesAleatorios, marcarCentroidesHeuristica, kMeans """
+from vistas import call_vistas
 
-import matplotlib.pyplot as plt
+call_vistas()
+
+""" import matplotlib.pyplot as plt
 
 k = 3
 puntos = abrirCSV('Datasets/dataset_2.csv')
@@ -70,4 +73,4 @@ for i, iteracion in enumerate(iteraciones):
     plt.title('Iteración ' + str(i + 1) + '.\nEn esta iteración ' + str(cambiaron) + ' puntos cambiaron de clúster')
     plt.tight_layout()
     plt.show(block = False)
-plt.show()
+plt.show() """

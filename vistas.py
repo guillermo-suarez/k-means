@@ -1,56 +1,98 @@
-import os
-import tkinter as tk
-from tkinter import ttk
-from tkinter import filedialog
+import PySimpleGUI as sg
+import pyautogui
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+from figuras import estadoInicial
 
-rutaArchivo = None
-archivo = None
 
-def cargarArchivo():
-    global rutaArchivo, archivo
-    ruta = filedialog.askopenfilename(filetypes = [('Archivos CSV', '*.csv')])
-    nombre = os.path.basename(ruta)
-    if ruta:
-        btnMostrar.config(state = 'normal')
-        rutaArchivo = ruta
-        archivo = nombre
+def getScreenSize():
+     width, height= pyautogui.size()
+     return width, height
 
-def mostrarValores():
-    valor = spinbox.get()
+def draw_figure(canvas, figure):
+   tkcanvas = FigureCanvasTkAgg(figure, canvas)
+   tkcanvas.draw()
+   tkcanvas.get_tk_widget().pack(side='top', fill='both', expand=1)
+   return tkcanvas
 
-    ventanaValores = tk.Toplevel(root)
-    ventanaValores.title('Valores Seleccionados')
+def call_vistas():
+    sg.theme('DarkGrey2')
+    sg.set_options(font=("Calibri", 14))
+    window = make_main()
+    while True:              
+        event, values = window.read() 
+        if event == sg.WIN_CLOSED or event == 'Salir':
+            break      
+        if event == 'Iniciar':
+            window.close()
+            make_inicio()            
+        window.close()
 
-    etiquetaArchivo = ttk.Label(ventanaValores, text = f'Archivo Seleecionado: {archivo}')
-    etiquetaArchivo.pack()
+def make_main():    
+    srcAncho, srcAlto = getScreenSize()   
+    layout = [[sg.Text(text = 'Trabajo Práctico Integrador',
+                   font=('Calibri', 30),
+                   size= 30, 
+                   expand_x= True,
+                   justification= 'center')],     
+            [sg.Text(text = 'Universidad Gastón Dachary - Inteligencia Artificial II - 2023', 
+                    font=('Calibri', 15),
+                    size= 15, 
+                    expand_x= True,
+                    justification= 'center')], 
+            [sg.Text(' ')],  
+            [sg.Text(text = 'Análisis del Algoritmo k-means',   
+                    font=('Calibri', 20),
+                    size= 20, 
+                    expand_x= True,
+                    justification= 'center')], 
+            [sg.Text(' ')],  
+            [sg.Button(button_text='Iniciar',
+                        size=(15,2), font=('Calibri')), 
+                        sg.Button(button_text='Salir',
+                                size=(15,2), font=('Calibri'))],
+            [sg.Text(' ')],  
+            [sg.Text(text = 'Malazotto, Soledad - Mezio, Santiago - Suárez, Guillermo',
+                    font=('Calibri', 10),
+                    size= 10, 
+                    expand_x= True,
+                    justification= 'center')]]
+    return sg.Window('TPI Inteligencia Artificial II', layout, element_justification='c', size=(650, 400))      
 
-    etiquetaRutaArchivo = ttk.Label(ventanaValores, text = f'Ruta del Archivo Seleecionado: {rutaArchivo}')
-    etiquetaRutaArchivo.pack()
+def make_inicio():    
+    layout = [[[sg.Canvas(key='-CANVAS-'),
+                sg.Button(button_text = 'Dataset 1'),
+                sg.Button(button_text = 'Dataset 2'),
+                sg.Button(button_text = 'Dataset 3'),]],[
+                   sg.Text(text = 'K =')
+               ]]
 
-    etiquetaValor = ttk.Label(ventanaValores, text = f'Valor Seleccionado: {valor}')
-    etiquetaValor.pack()
-
-root = tk.Tk()
-root.title('TPI - IA 2 - Grupo 1')
-root.resizable(False, False)
-
-frame = ttk.Frame(root, padding = 5)
-frame.grid()
-
-tituloTP = ttk.Label(frame, text = 'Trabajo Práctico Integrador')
-tituloTP.grid(column = 0, row = 0)
-
-tituloCat = ttk.Label(frame, text = 'Inteligencia Artificial II - k-means')
-tituloCat.grid(column = 0, row = 1)
-
-btnDataset = ttk.Button(frame, text = 'Cargar Dataset (archivo .CSV)', command = cargarArchivo)
-btnDataset.grid(column = 0, row = 2)
-
-spinbox = ttk.Spinbox(frame, from_ = 2, to_ = 5)
-spinbox.grid(column = 1, row = 2)
-spinbox.set(5)
-
-btnMostrar = ttk.Button(frame, text = 'Resolver', command = mostrarValores, state = 'disabled')
-btnMostrar.grid(column = 0, row = 3)
-
-root.mainloop()
+    window = sg.Window('Inicio', layout, finalize=True)
+    canvas_elem = window['-CANVAS-']
+    canvas = canvas_elem.Widget
+    fig = estadoInicial(1)
+    print(fig)
+    fig_canvas_agg = FigureCanvasTkAgg(fig, canvas)
+    fig_canvas_agg.get_tk_widget().pack(side='top', fill='both', expand=1)
+    while True:              
+        event, values = window.read() 
+        if event == sg.WIN_CLOSED or event == 'Salir':
+            break      
+        if event == 'Dataset 1':
+            print('set1')
+            fig = estadoInicial(1)
+            fig_canvas_agg.get_tk_widget().pack_forget()  # Remove the previous figure
+            fig_canvas_agg = FigureCanvasTkAgg(fig, canvas)
+            fig_canvas_agg.get_tk_widget().pack(side='top', fill='both', expand=1) 
+        elif event == 'Dataset 2':
+            print('set2')
+            fig = estadoInicial(2)
+            fig_canvas_agg.get_tk_widget().pack_forget()  # Remove the previous figure
+            fig_canvas_agg = FigureCanvasTkAgg(fig, canvas)
+            fig_canvas_agg.get_tk_widget().pack(side='top', fill='both', expand=1) 
+        elif event == 'Dataset 3':
+            print('set3')
+            fig = estadoInicial(3)         
+            fig_canvas_agg.get_tk_widget().pack_forget()  # Remove the previous figure
+            fig_canvas_agg = FigureCanvasTkAgg(fig, canvas)
+            fig_canvas_agg.get_tk_widget().pack(side='top', fill='both', expand=1)          
+    window.close()
