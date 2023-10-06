@@ -83,31 +83,39 @@ def make_inicio():
                ],
                [sg.Button(button_text='Iniciar')]]
 
-    window = sg.Window('Inicio', layout, finalize=True, element_justification='c')
-    canvas_elem = window['-CANVAS-']
+    window0 = sg.Window('Inicio', layout, finalize=True, element_justification='c')
+    window  = [window0, None]
+    active  = [True, False]
+    event   = [None, None]
+    values  = [None, None]
+    canvas_elem = window[0]['-CANVAS-']
     canvas = canvas_elem.Widget
     fig_canvas_agg= None
     while True:              
-        event, values = window.read() 
-        if event == sg.WIN_CLOSED or event == 'Salir':
-            break      
-        
-        elif event == 'Abrir':
-            file_path = values['file_path']
-            if file_path:
-                fig = estadoInicial(file_path)
-                if fig_canvas_agg != None:
-                    fig_canvas_agg.get_tk_widget().pack_forget()  # Remove the previous figure
-                fig_canvas_agg = FigureCanvasTkAgg(fig, canvas)
-                fig_canvas_agg.get_tk_widget().pack(side='top', fill='both', expand=1)         
-        elif event == 'Iniciar': 
-            k_mapping = {'k2': 2, 'k3': 3, 'k4': 4, 'k5': 5}
-            selected_k_key = [key for key in k_mapping.keys() if values[key]][0]
-            selected_k = k_mapping[selected_k_key]
-            inicializacion_mapping = {'iA': 'Aleatoria', 'iH': 'Heurística'}
-            selected_inicializacion_key = [key for key in inicializacion_mapping.keys() if values[key]][0]
-            selected_inicializacion = inicializacion_mapping[selected_inicializacion_key]
-            
-            print(f'Selected K: {selected_k}')
-            print(f'Selected Inicialización: {selected_inicializacion}')
-    window.close()
+        for i in range(2):
+             if active[i] and window[i] != None:
+                event[i], values[i] = window[i].read(timeout=50)
+                if event[i] == sg.WIN_CLOSED or event[i] == 'Salir':
+                    if i == 0:
+                        active[i] = False
+                        window[i].close()
+                        break      
+                
+                elif event[i] == 'Abrir':
+                    file_path = values['file_path']
+                    if file_path:
+                        fig = estadoInicial(file_path)
+                        if fig_canvas_agg != None:
+                            fig_canvas_agg.get_tk_widget().pack_forget()  # Remove the previous figure
+                        fig_canvas_agg = FigureCanvasTkAgg(fig, canvas)
+                        fig_canvas_agg.get_tk_widget().pack(side='top', fill='both', expand=1)         
+                elif event[i] == 'Iniciar': 
+                    k_mapping = {'k2': 2, 'k3': 3, 'k4': 4, 'k5': 5}
+                    selected_k_key = [key for key in k_mapping.keys() if values[0][key]][0]
+                    selected_k = k_mapping[selected_k_key]
+                    inicializacion_mapping = {'iA': 'Aleatoria', 'iH': 'Heurística'}
+                    selected_inicializacion_key = [key for key in inicializacion_mapping.keys() if values[0][key]][0]
+                    selected_inicializacion = inicializacion_mapping[selected_inicializacion_key]
+                    
+                    print(f'Selected K: {selected_k}')
+                    print(f'Selected Inicialización: {selected_inicializacion}')
