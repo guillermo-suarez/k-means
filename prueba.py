@@ -9,9 +9,6 @@ for k in range(2, 6):
     chScorePromedio = 0
     chScoreLPromedio = 0
     for i in range(pruebas):
-        BGSS = 0
-        WGSS = 0
-        chScore = 0
         puntos, etiquetas = abrirCSV('Datasets/dataset_3.csv')
         centroides, puntos, etiquetas = marcarCentroidesHeuristica(k, puntos, etiquetas)
         iteraciones = kMeans(k, puntos, etiquetas, centroides)

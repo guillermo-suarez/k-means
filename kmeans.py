@@ -8,6 +8,8 @@ def marcarCentroidesAleatorios(k, puntos, etiquetas):
     n = len(puntos)
     for i in range(k):
         j = rnd.randint(0, n - 1)
+        while etiquetas[j] != 0:
+            j = rnd.randint(0, n - 1)
         centroides.append([puntos[j][0], puntos[j][1]])
         etiquetas[j] = i + 1
     return centroides, puntos, etiquetas
@@ -15,10 +17,16 @@ def marcarCentroidesAleatorios(k, puntos, etiquetas):
 def marcarCentroidesHeuristica(k, puntos, etiquetas):
     centroides = []
     n = len(puntos)
-    # Primero seleccionamos un punto aleatorio
-    j = rnd.randint(0, n - 1)
-    centroides.append([puntos[j][0], puntos[j][1]])
-    etiquetas[j] = 1
+    # PRIMER CENTROIDE: el punto mas lejano al centroide del dataset
+    baricentro = getPuntoMedio(puntos)
+    distancias_baricentro = []
+    for j, punto in enumerate(puntos):
+        distancia_al_baricentro = calcularDistancia(baricentro, punto)
+        distancias_baricentro.append(distancia_al_baricentro)
+    pto = distancias_baricentro.index(max(distancias_baricentro))
+    centroides.append([puntos[pto][0], puntos[pto][1]])
+    etiquetas[pto] = 1
+    # RESTO DE LOS CENTROIDES: el punto que maximice su distancia a su centroide mas cercano (de lo que se hayan definido hasta el momento)
     for i in range(1, k):        
         # Calculamos los siguientes centroides a partir de las distancias mínimas:
         distancias_minimas = []
@@ -36,8 +44,9 @@ def marcarCentroidesHeuristica(k, puntos, etiquetas):
 
 def kMeans(k, puntos, etiquetas, centroides):
     iteraciones = []
-    puntosQueCambiaron = 1
-    while puntosQueCambiaron > 0:
+    umbral = round((len(puntos) * 0.01) + 0.5)
+    puntosQueCambiaron = umbral + 1
+    while puntosQueCambiaron >= umbral:
         puntosQueCambiaron = 0
         # Para cada punto...
         for i, punto in enumerate(puntos):

@@ -28,9 +28,6 @@ def separarPorClusters(k, puntos, etiquetas):
     return clusters
 
 def calcularDistancia(puntoA, puntoB):
-    return m.sqrt((puntoA[0]-puntoB[0])**2 + (puntoA[1]-puntoB[1])**2)
-
-def calcularDistanciaCuadrada(puntoA, puntoB):
     return ((puntoA[0]-puntoB[0])**2 + (puntoA[1]-puntoB[1])**2)
 
 def getPuntoMedio(grupoDePuntos):
@@ -50,7 +47,7 @@ def calcularBGSS(dataset, centroides, clusters):
     baricentro = getPuntoMedio(dataset)
     for i, cluster in enumerate(clusters):
         nCluster = len(cluster)
-        distanciaBaricentro = calcularDistanciaCuadrada(centroides[i], baricentro)
+        distanciaBaricentro = calcularDistancia(centroides[i], baricentro)
         BGSS += (nCluster * distanciaBaricentro)
     return BGSS
 
@@ -60,7 +57,7 @@ def calcularWGSS(centroides, clusters):
     for i, cluster in enumerate(clusters):
         sumatoria = 0
         for punto in cluster:
-            sumatoria += calcularDistanciaCuadrada(centroides[i], punto)
+            sumatoria += calcularDistancia(centroides[i], punto)
         WGSS += sumatoria
     return WGSS
 
