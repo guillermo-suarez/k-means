@@ -1,5 +1,5 @@
-from funciones import abrirCSV, getCHScore
-from kmeans import marcarCentroidesAleatorios, marcarCentroidesHeuristica, kMeans
+from funciones import abrirCSV, ch_score
+from kmeans import marcarCentroidesAleatorios, kMeans
 
 pruebas = 10
 # Se prueba en todo el rango de los k posibles

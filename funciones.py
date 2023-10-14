@@ -6,37 +6,36 @@ def abrirCSV(path: str):
         encabezados = next(reader)
         datos = list(reader)
     puntos = []
-    etiquetas = []
     for dato in datos:
         x = float(dato[0].replace(',', '.'))
         y = float(dato[1].replace(',', '.'))
-        punto = [x, y]
+        cluster = int(0)
+        punto = [x, y, cluster]
         puntos.append(punto)
+    return puntos
 
-        etiqueta = int(0)
-        etiquetas.append(etiqueta)
-    return puntos, etiquetas
-
-def separarPorClusters(k, puntos, etiquetas):
+def separarPorClusters(k, puntos):
     clusters = []
     for i in range(k):
         cluster = []
         clusters.append(cluster)
-    for i, punto in enumerate(puntos):
-        clusters[etiquetas[i] - 1].append(punto) 
+    for punto in puntos:
+        clusters[punto[2] - 1].append([punto[0], punto[1]]) 
     return clusters
 
 def calcularDistancia(puntoA, puntoB):
-    return ((puntoA[0]-puntoB[0])**2 + (puntoA[1]-puntoB[1])**2)
+    return m.sqrt((puntoA[0]-puntoB[0])**2 + (puntoA[1]-puntoB[1])**2)
 
-def getPuntoMedio(grupoDePuntos):
-    nuevoCentroide = None
-    if len(grupoDePuntos) > 0:
-        valoresX = [punto[0] for punto in grupoDePuntos]
-        valoresY = [punto[1] for punto in grupoDePuntos]
-        x = sum(valoresX) / len(valoresX)
-        y = sum(valoresY) / len(valoresY)
-        nuevoCentroide = [x, y]
+def actualizarCentroide(cluster, centroide):
+    if len(cluster) > 0:
+        valoresX = [punto[0] for punto in cluster]
+        valoresY = [punto[1] for punto in cluster]
+        x = min(valoresX) + ((max(valoresX) - min(valoresX)) / 2.0)
+        y = min(valoresY) + ((max(valoresY) - min(valoresY)) / 2.0)
+    else:
+        x = centroide[0]
+        y = centroide[1]
+    nuevoCentroide = [x, y]
     return nuevoCentroide
 
 def calcularBGSS(dataset, centroides, clusters):
