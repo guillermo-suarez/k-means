@@ -1,7 +1,9 @@
 from funciones import abrirCSV, separarPorClusters
 from kmeans import marcarCentroidesAleatorios, marcarCentroidesHeuristica, kMeans
 
-import matplotlib.pyplot as plt
+call_vistas()
+
+""" import matplotlib.pyplot as plt
 
 k = 5
 puntos, etiquetas = abrirCSV('Datasets/dataset_3.csv')
@@ -22,7 +24,7 @@ limMaxX = maxX + ((maxX - minX) * 0.1)
 limMinY = minY - ((maxY - minY) * 0.1)
 limMaxY = maxY + ((maxY - minY) * 0.1)
 
-# Como son 5 clústers como máximo, 5 colores
+# Como son 5 clústers como máximo, 5 colores 
 colores = [
     [1, 0, 0],
     [0, 1, 0],
@@ -73,4 +75,4 @@ for i, iteracion in enumerate(iteraciones):
     plt.title('Iteración ' + str(i + 1) + '.\nEn esta iteración ' + str(cambiaron) + ' puntos cambiaron de clúster.\nCalinski-Harabasz score: ' + ("%.2f" % chScore))
     plt.tight_layout()
     plt.show(block = False)
-plt.show()
+plt.show() """
