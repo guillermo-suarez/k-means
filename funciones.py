@@ -43,30 +43,30 @@ def getPuntoMedio(grupoDePuntos):
 def calcularBGSS(dataset, centroides, clusters):
     # Función que devuelve la dispersión inter-cluster.
     # El baricentro es el centroide del dataset.
-    BGSS = 0
+    bgss = 0
     baricentro = getPuntoMedio(dataset)
     for i, cluster in enumerate(clusters):
         nCluster = len(cluster)
         distanciaBaricentro = calcularDistancia(centroides[i], baricentro)
-        BGSS += (nCluster * distanciaBaricentro)
-    return BGSS
+        bgss += (nCluster * distanciaBaricentro)
+    return bgss
 
 def calcularWGSS(centroides, clusters):
     # Función que devuelve la dispersión intra-cluster.
-    WGSS = 0
+    wgss = 0
     for i, cluster in enumerate(clusters):
         sumatoria = 0
         for punto in cluster:
             sumatoria += calcularDistancia(centroides[i], punto)
-        WGSS += sumatoria
-    return WGSS
+        wgss += sumatoria
+    return wgss
 
 def getCHScore(centroides, puntos, etiquetas):
     # Función que permite calcular el indice Calinski-Harabasz.
-    N = len(puntos)
+    n = len(puntos)
     k = len(centroides)
     clusters = separarPorClusters(k, puntos, etiquetas)
-    BGSS = calcularBGSS(puntos, centroides, clusters)
-    WGSS = calcularWGSS(centroides, clusters)
-    chScore = ((BGSS / WGSS) * ((N - k) / (k - 1)))
+    bgss = calcularBGSS(puntos, centroides, clusters)
+    wgss = calcularWGSS(centroides, clusters)
+    chScore = ((bgss / wgss) * ((n - k) / (k - 1)))
     return chScore
