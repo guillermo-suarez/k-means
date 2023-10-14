@@ -1,25 +1,33 @@
 import copy
 import random as rnd
 
-from funciones import calcularDistancia, actualizarCentroide, separarPorClusters
+from funciones import calcularDistancia, getPuntoMedio, separarPorClusters, getCHScore
 
-def marcarCentroidesAleatorios(k, puntos):
+def marcarCentroidesAleatorios(k, puntos, etiquetas):
     centroides = []
     n = len(puntos)
     for i in range(k):
         j = rnd.randint(0, n - 1)
+        while etiquetas[j] != 0:
+            j = rnd.randint(0, n - 1)
         centroides.append([puntos[j][0], puntos[j][1]])
-        puntos[j][2] = i + 1
-    return centroides, puntos
+        etiquetas[j] = i + 1
+    return centroides, puntos, etiquetas
 
-def marcarCentroidesHeuristica(k, puntos):
+def marcarCentroidesHeuristica(k, puntos, etiquetas):
     centroides = []
     n = len(puntos)
-    #Primero seleccionamos un punto aleatorio
-    j = rnd.randint(0, n - 1)
-    centroides.append([puntos[j][0], puntos[j][1]])
-    puntos[j][2] = 1
-    for i in range(k-1):        
+    # PRIMER CENTROIDE: el punto mas lejano al centroide del dataset
+    baricentro = getPuntoMedio(puntos)
+    distancias_baricentro = []
+    for j, punto in enumerate(puntos):
+        distancia_al_baricentro = calcularDistancia(baricentro, punto)
+        distancias_baricentro.append(distancia_al_baricentro)
+    pto = distancias_baricentro.index(max(distancias_baricentro))
+    centroides.append([puntos[pto][0], puntos[pto][1]])
+    etiquetas[pto] = 1
+    # RESTO DE LOS CENTROIDES: el punto que maximice su distancia a su centroide mas cercano (de lo que se hayan definido hasta el momento)
+    for i in range(1, k):        
         # Calculamos los siguientes centroides a partir de las distancias mínimas:
         distancias_minimas = []
         for j, punto in enumerate(puntos):
@@ -28,19 +36,20 @@ def marcarCentroidesHeuristica(k, puntos):
                 distancia = calcularDistancia(centroide, punto)
                 distancia_minima = min(distancia_minima, distancia)
             distancias_minimas.append(distancia_minima)
-        #Seleccionamos el punto con mayor distancia al centroide    
+        # Seleccionamos el punto con mayor distancia al centroide    
         pto = distancias_minimas.index(max(distancias_minimas)) 
         centroides.append([puntos[pto][0], puntos[pto][1]])
-        puntos[pto][2] = i + 1
-    return centroides, puntos
+        etiquetas[pto] = i + 1
+    return centroides, puntos, etiquetas
 
-def kMeans(k, puntos, centroides):
+def kMeans(k, puntos, etiquetas, centroides):
     iteraciones = []
-    puntosQueCambiaron = 1
-    while puntosQueCambiaron > 0:
+    umbral = round((len(puntos) * 0.01) + 0.5)
+    puntosQueCambiaron = umbral + 1
+    while puntosQueCambiaron >= umbral:
         puntosQueCambiaron = 0
         # Para cada punto...
-        for punto in puntos:
+        for i, punto in enumerate(puntos):
             # ...calculamos las distancias con todos los otros centroides
             distancias = [calcularDistancia(centroide, punto) for centroide in centroides]
             # Buscamos, entre todas esas distancias, la más chica e identificamos a que clúster ahora pertenecería el punto
@@ -48,21 +57,27 @@ def kMeans(k, puntos, centroides):
                 if distancia == min(distancias):
                     nroClusterMin = j + 1
             # Si va a cambiar el Nº de cluster al que pertenece el punto, se aumenta en 1 el contador de puntos que cambiaron de cluster
-            if nroClusterMin != punto[2]:
+            if nroClusterMin != etiquetas[i]:
                 puntosQueCambiaron = puntosQueCambiaron + 1
             # Se reemplaza en que cluster está
-            punto[2] = nroClusterMin
+            etiquetas[i] = nroClusterMin
         # Después de terminar la iteración...
         # Se crea una copia de todos los centroides
         centroidesIteracion = copy.deepcopy(centroides)
-        # Además, se crea una copia de todos los puntos con sus Nº de clúster actualizados
-        puntosIteracion = copy.deepcopy(puntos)
-        # Y se los divide en clústers
-        clustersIteracion = separarPorClusters(k, puntosIteracion)
+        # Se crea una copia de como quedaron las etiquetas
+        etiquetasIteracion = copy.deepcopy(etiquetas)
+        chScoreIteracion = getCHScore(centroidesIteracion, puntos, etiquetasIteracion)
         # Ahora sí, creamos la iteración y la agregamos a la lista de iteraciones
-        iteracion = [centroidesIteracion, clustersIteracion, puntosQueCambiaron]
+        iteracion = [centroidesIteracion, etiquetasIteracion, puntosQueCambiaron, chScoreIteracion]
         iteraciones.append(iteracion)
         # Si al menos 1 punto cambió de cluster, se actualizan los centroides
         if puntosQueCambiaron > 0:
-            centroides = [actualizarCentroide(cluster, centroides[i]) for i, cluster in enumerate(separarPorClusters(k, puntos))]
+            nuevosCentroides = []
+            for i, cluster in enumerate(separarPorClusters(k, puntos, etiquetas)):
+                if getPuntoMedio(cluster) == None:
+                    nuevoCentroide = centroides[i]
+                else:
+                    nuevoCentroide = getPuntoMedio(cluster)
+                nuevosCentroides.append(nuevoCentroide)
+            centroides = nuevosCentroides
     return copy.deepcopy(iteraciones)
