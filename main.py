@@ -1,5 +1,6 @@
 from funciones import abrirCSV, separarPorClusters
 from kmeans import marcarCentroidesAleatorios, marcarCentroidesHeuristica, kMeans
+from vistas import call_vistas
 
 call_vistas()
 
