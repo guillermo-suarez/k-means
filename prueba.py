@@ -1,8 +1,6 @@
 from funciones import abrirCSV, getCHScore
 from kmeans import marcarCentroidesAleatorios, marcarCentroidesHeuristica, kMeans
 
-from sklearn import metrics
-
 pruebas = 10
 # Se prueba en todo el rango de los k posibles
 for k in range(2, 6):
