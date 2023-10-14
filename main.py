@@ -1,7 +1,10 @@
-from funciones import abrirCSV
-from kmeans import marcarCentroidesAleatorios, marcarCentroidesHeuristica, kMeans
+""" from funciones import abrirCSV
+from kmeans import marcarCentroidesAleatorios, marcarCentroidesHeuristica, kMeans """
+from vistas import call_vistas
 
-import matplotlib.pyplot as plt
+call_vistas()
+
+""" import matplotlib.pyplot as plt
 
 k = 3
 puntos = abrirCSV('Datasets/dataset_2.csv')
@@ -21,7 +24,7 @@ limMaxX = maxX + ((maxX - minX) * 0.1)
 limMinY = minY - ((maxY - minY) * 0.1)
 limMaxY = maxY + ((maxY - minY) * 0.1)
 
-# Como son 5 clústers como máximo, 5 colores
+# Como son 5 clústers como máximo, 5 colores 
 colores = [
     [1, 0, 0],
     [0, 1, 0],
@@ -53,10 +56,7 @@ for i, iteracion in enumerate(iteraciones):
     plt.figure()
     centroides = iteracion[0]
     clusters = iteracion[1]
-    cambiaron = iteracion[2]
-    for j, cluster in enumerate(clusters):
-        x = [punto[0] for punto in cluster]
-        y = [punto[1] for punto in cluster]
+    cambiaron = iteracion[2] 
         plt.scatter(x, y, label = 'Punto del clúster ' + str(j + 1), color = colores[j], s = 20.0, edgecolors = 'black')
     for h, centroide in enumerate(centroides):
         x = centroide[0]
@@ -70,4 +70,4 @@ for i, iteracion in enumerate(iteraciones):
     plt.title('Iteración ' + str(i + 1) + '.\nEn esta iteración ' + str(cambiaron) + ' puntos cambiaron de clúster')
     plt.tight_layout()
     plt.show(block = False)
-plt.show()
+plt.show() """
