@@ -5,7 +5,6 @@ pruebas = 10
 # Se prueba en todo el rango de los k posibles
 for k in range(2, 6):
     chScorePromedio = 0
-    chScoreLPromedio = 0
     for i in range(pruebas):
         puntos, etiquetas = abrirCSV('Datasets/dataset_3.csv')
         centroides, puntos, etiquetas = marcarCentroidesHeuristica(k, puntos, etiquetas)
