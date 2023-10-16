@@ -63,12 +63,11 @@ def make_inicio():
     current_folder = os.getcwd()
     csv_insertado = False
     column =[   [
-                    sg.Text('Seleccionar un archivo CSV'),
-                    sg.InputText(key='file_path'), sg.FileBrowse('Buscar',initial_folder=current_folder+'/Datasets', file_types=(("Archivos CSV", "*.csv"),)), 
-                    sg.Button(button_text='Previsualizar')                   
+                    sg.Text('Seleccionar dataset'),
+                    sg.InputText(key='file_path', enable_events=True), sg.FileBrowse('Buscar',initial_folder=current_folder+'/Datasets', file_types=(("Archivos CSV", "*.csv"),)),                 
                 ],
                 [
-                    sg.Text(text = 'K ='),
+                    sg.Text(text = 'Cantidad de clusters (k)'),
                     sg.Radio('2', 'k', key='k2', default=True),
                     sg.Radio('3', 'k', key='k3', default=False),
                     sg.Radio('4', 'k', key='k4', default=False),
@@ -93,13 +92,14 @@ def make_inicio():
                 event[i], values[i] = window[i].read(timeout=50)
                 if(event[i] != "__TIMEOUT__"):
                     print(i)
+                    print(values[i])
                     print(event[i])
                 if event[i] == sg.WIN_CLOSED or event[i] == 'Salir':
                     active[i] = False
                     window[i].close()
                     if i == 0:                        
                         break 
-                elif event[i] == 'Previsualizar':
+                elif event[i] == 'file_path':
                     file_path = values[0]['file_path']
                     if file_path:
                         fig = estadoInicial(file_path)
