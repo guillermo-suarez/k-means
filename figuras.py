@@ -20,13 +20,20 @@ def estadoInicial(csv):
     ax.set_ylabel('Eje Y')
     ax.set_xlim(limMinX, limMaxX)
     ax.set_ylim(limMinY, limMaxY)
-    ax.set_title('Estado inicial')
+    ax.set_title('Dataset')
     ax.legend(loc='upper left', bbox_to_anchor=(1, 1))
     fig.tight_layout()
     return fig
 
 def figsKmeans(csv, k, tipo):
     puntos, etiquetas = abrirCSV(csv)
+    figInicial, iteraciones = figInicialKmeans(puntos, etiquetas, k, tipo)
+    i = len(iteraciones) - 1
+    figFinal = figIteracionKmeans(puntos, iteraciones, k, i)
+    return figInicial, figFinal, iteraciones, k, puntos
+
+
+def figInicialKmeans(puntos, etiquetas, k, tipo):    
     colores = [
     [1, 0, 0],
     [0, 1, 0],
@@ -34,13 +41,6 @@ def figsKmeans(csv, k, tipo):
     [1, 0, 1],
     [0, 1, 1]
     ]
-    figInicial, iteraciones = figInicialKmeans(puntos, etiquetas, k, tipo, colores)
-    i = len(iteraciones) - 1
-    figFinal = figIteracionKmeans(puntos, iteraciones, k, i, colores)
-    return figInicial, figFinal, iteraciones
-
-
-def figInicialKmeans(puntos, etiquetas, k, tipo, colores):    
     fig, ax = plt.subplots()
     minX = min([punto[0] for punto in puntos])
     maxX = max([punto[0] for punto in puntos])
@@ -75,7 +75,14 @@ def figInicialKmeans(puntos, etiquetas, k, tipo, colores):
         ax.scatter(x, y, label = 'Centroide ' + str(h + 1), color = colores[h], s = 100.0, edgecolors = 'black')    
     return fig, iteraciones
 
-def figIteracionKmeans(puntos, iteraciones, k, i, colores):
+def figIteracionKmeans(puntos, iteraciones, k, i):
+    colores = [
+    [1, 0, 0],
+    [0, 1, 0],
+    [0, 0, 1],
+    [1, 0, 1],
+    [0, 1, 1]
+    ]
     fig, ax = plt.subplots()
     minX = min([punto[0] for punto in puntos])
     maxX = max([punto[0] for punto in puntos])
