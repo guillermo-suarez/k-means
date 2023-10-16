@@ -87,7 +87,7 @@ def make_inicio():
     canvas = canvas_elem.Widget
     fig_canvas_agg= None
     while True:              
-        for i in range(2):
+        for i in range(3):
              if active[i] and window[i] != None:
                 event[i], values[i] = window[i].read(timeout=50)
                 if event[i] == sg.WIN_CLOSED or event[i] == 'Salir':
