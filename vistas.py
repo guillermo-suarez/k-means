@@ -99,6 +99,14 @@ def make_inicio():
                     window[i].close()
                     if i == 0:                        
                         break 
+                    elif i == 1:
+                        if active[3] == True:
+                            active[3] = False
+                            window[3].close()
+                    elif i == 2:
+                        if active[4] == True:
+                            active[4] = False
+                            window[4].close()
                 elif event[i] == 'file_path':
                     file_path = values[0]['file_path']
                     if file_path:
@@ -154,14 +162,14 @@ def make_inicio():
                     fig_canvas_agg_Final.get_tk_widget().pack(side='top', fill='both', expand=1)   
                     move_center(window[2])
                 elif event[i] == "Ver Iteraciones":
-                    if i == 1:
+                    if i == 1 and not active[3]:
                         layoutIter = make_iteraciones(iteracionesA, "IterAleatorio")                        
                         window[3] =  sg.Window('Iteraciones con Inicialización Aleatoria', layoutIter, finalize=True, element_justification='c') 
                         active[3] = True   
                         canvas_elem_iterA = window[3]['-figIteracion-']
                         canvas_iterA = canvas_elem_iterA.Widget
                         fig_canvas_agg_iterA= None
-                    elif i == 2:
+                    elif i == 2 and not active[4]:
                         layoutIter = make_iteraciones(iteracionesH, "IterHeuristico")
                         window[4] =  sg.Window('Iteraciones con Inicialización Heurística', layoutIter, finalize=True, element_justification='c')     
                         active[4] = True
