@@ -68,10 +68,7 @@ def make_inicio():
                 ],
                 [
                     sg.Text(text = 'Cantidad de clusters (k)'),
-                    sg.Radio('2', 'k', key='k2', default=True),
-                    sg.Radio('3', 'k', key='k3', default=False),
-                    sg.Radio('4', 'k', key='k4', default=False),
-                    sg.Radio('5', 'k', key='k5', default=False)
+                    sg.Spin(values=[i for i in range(2, 6)], initial_value=2, key='k', readonly=True),
                 ]]
     layout = [  [sg.Canvas(key='-CANVAS-')],
                 [sg.Column(column, scrollable= False)],
@@ -120,10 +117,8 @@ def make_inicio():
                         window0['Aleatoria'].update(disabled=False)
                         window0['Heuristica'].update(disabled=False)
                 elif event[i] == 'Aleatoria' and not active[1]: 
-                    k_mapping = {'k2': 2, 'k3': 3, 'k4': 4, 'k5': 5}
-                    selected_k_key = [key for key in k_mapping.keys() if values[0][key]][0]
-                    selected_k = k_mapping[selected_k_key]
-                    figInicial, figFinal, iteracionesA, kUsado, puntosUsados = figsKmeans(values[0]['file_path'], selected_k, 'a')
+                    k = int(values[0]['k'])
+                    figInicial, figFinal, iteracionesA, kUsado, puntosUsados = figsKmeans(values[0]['file_path'], k, 'a')
                     layoutA = [  
                         [sg.Canvas(key='-figInicial-'),
                         sg.Canvas(key='-figFinal-')],
@@ -141,10 +136,8 @@ def make_inicio():
                     fig_canvas_agg_Final.get_tk_widget().pack(side='top', fill='both', expand=1)    
                     move_center(window[1])
                 elif event[i] == 'Heuristica' and not active[2]: 
-                    k_mapping = {'k2': 2, 'k3': 3, 'k4': 4, 'k5': 5}
-                    selected_k_key = [key for key in k_mapping.keys() if values[0][key]][0]
-                    selected_k = k_mapping[selected_k_key]
-                    figInicial, figFinal, iteracionesH, kUsado, puntosUsados = figsKmeans(values[0]['file_path'], selected_k, 'h')
+                    k = int(values[0]['k'])
+                    figInicial, figFinal, iteracionesH, kUsado, puntosUsados = figsKmeans(values[0]['file_path'], k, 'h')
                     layoutH = [  
                         [sg.Canvas(key='-figInicial-'),
                         sg.Canvas(key='-figFinal-')],
