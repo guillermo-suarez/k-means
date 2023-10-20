@@ -29,7 +29,6 @@ def call_vistas():
         window.close()
 
 def make_main():    
-    srcAncho, srcAlto = getScreenSize()   
     layout = [[sg.Text(text = 'Trabajo Práctico Integrador',
                    font=('Calibri', 30),
                    size= 30, 
