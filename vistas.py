@@ -87,10 +87,6 @@ def make_inicio():
         for i in range(5):
              if active[i] and window[i] != None:
                 event[i], values[i] = window[i].read(timeout=50)
-                if(event[i] != "__TIMEOUT__"):
-                    print(i)
-                    print(values[i])
-                    print(event[i])
                 if event[i] == sg.WIN_CLOSED or event[i] == 'Salir':
                     active[i] = False
                     window[i].close()
@@ -112,7 +108,7 @@ def make_inicio():
                             fig_canvas_agg.get_tk_widget().pack_forget()  # Remove the previous figure
                         fig_canvas_agg = FigureCanvasTkAgg(fig, canvas)
                         fig_canvas_agg.get_tk_widget().pack(side='top', fill='both', expand=1)  
-                        move_center(window[0])
+                        move_center(window[0], 2)
                         csv_insertado = True
                         window0['Aleatoria'].update(disabled=False)
                         window0['Heuristica'].update(disabled=False)
@@ -134,7 +130,7 @@ def make_inicio():
                     canvas_Final = canvas_elem_Final.Widget
                     fig_canvas_agg_Final= FigureCanvasTkAgg(figFinal, canvas_Final)
                     fig_canvas_agg_Final.get_tk_widget().pack(side='top', fill='both', expand=1)    
-                    move_center(window[1])
+                    move_center(window[1], 5)
                 elif event[i] == 'Heuristica' and not active[2]: 
                     k = int(values[0]['k'])
                     figInicial, figFinal, iteracionesH, kUsado, puntosUsados = figsKmeans(values[0]['file_path'], k, 'h')
@@ -153,7 +149,7 @@ def make_inicio():
                     canvas_Final = canvas_elem_Final.Widget
                     fig_canvas_agg_Final= FigureCanvasTkAgg(figFinal, canvas_Final)
                     fig_canvas_agg_Final.get_tk_widget().pack(side='top', fill='both', expand=1)   
-                    move_center(window[2])
+                    move_center(window[2], 5)
                 elif event[i] == "Ver Iteraciones":
                     if i == 1 and not active[3]:
                         layoutIter = make_iteraciones(iteracionesA, "IterAleatorio")                        
@@ -188,15 +184,13 @@ def make_inicio():
          break
     window0.close()
 
-def move_center(window):
+def move_center(window, mover):
     screen_width, screen_height = window.get_screen_dimensions()
     win_width, win_height = window.size
-    x, y = (screen_width - win_width)//2, (screen_height - win_height)//4
+    x, y = (screen_width - win_width)//mover, (screen_height - win_height)//4
     window.move(x, y)               
 
 def make_iteraciones(iteraciones, tipo):
-    filas = len(iteraciones)
-    columnas = 1
     valores = []
     cabeceras = ["Iteraciones"]
     for i, iter in enumerate(iteraciones):
