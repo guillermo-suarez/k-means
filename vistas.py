@@ -175,10 +175,10 @@ def make_inicio():
                     umbral = round((len(puntosUsados) * 0.01) + 0.5)
                     strTexto = str(cambiaron) + ' puntos/s cambiaron de clúster con respecto a la iteración anterior.\nEste dataset tiene ' + str(len(puntosUsados)) + ' puntos.'
                     if cambiaron >= umbral:
-                        strMayorIgual = '\nYa que ' + str(cambiaron) + ' >= ' + str(umbral) +  ' (%1 de ' + str(len(puntosUsados)) + '), entonces SE DEBE SEGUIR ITERANDO.'
+                        strMayorIgual = '\nYa que ' + str(cambiaron) + ' >= ' + str(umbral) +  ' (1% de ' + str(len(puntosUsados)) + '), entonces SE DEBE SEGUIR ITERANDO.'
                     else:
-                        strMayorIgual = '\nYa que ' + str(cambiaron) + ' < ' + str(umbral) +  ' (%1 de ' + str(len(puntosUsados)) + '), entonces NO SE DEBE SEGUIR ITERANDO.'
-                    strTexto = strTexto + strMayorIgual + '\nPuntaje de Calinski-Harabasz de esta iteración: ' + ("%.2f" % iteracionesA[clicked_row_index][3])
+                        strMayorIgual = '\nYa que ' + str(cambiaron) + ' < ' + str(umbral) +  ' (1% de ' + str(len(puntosUsados)) + '), entonces NO SE DEBE SEGUIR ITERANDO.'
+                    strTexto = strTexto + strMayorIgual + '\nEl puntaje de Calinski-Harabasz de esta iteración es de ' + ("%.2f" % iteracionesA[clicked_row_index][3])
                     window[3]['txtIterAleatorio'].update(strTexto)
                 elif event[i] == "IterHeuristico":
                     clicked_row_index = values[i][event[i]][0]   
@@ -191,10 +191,10 @@ def make_inicio():
                     umbral = round((len(puntosUsados) * 0.01) + 0.5)
                     strTexto = str(cambiaron) + ' puntos/s cambiaron de clúster con respecto a la iteración anterior.\nEste dataset tiene ' + str(len(puntosUsados)) + ' puntos.'
                     if cambiaron >= umbral:
-                        strMayorIgual = '\nYa que ' + str(cambiaron) + ' >= ' + str(umbral) +  ' (%1 de ' + str(len(puntosUsados)) + '), entonces SE DEBE SEGUIR ITERANDO.'
+                        strMayorIgual = '\nYa que ' + str(cambiaron) + ' >= ' + str(umbral) +  ' (1% de ' + str(len(puntosUsados)) + '), entonces SE DEBE SEGUIR ITERANDO.'
                     else:
-                        strMayorIgual = '\nYa que ' + str(cambiaron) + ' < ' + str(umbral) +  ' (%1 de ' + str(len(puntosUsados)) + '), entonces NO SE DEBE SEGUIR ITERANDO.'
-                    strTexto = strTexto + strMayorIgual + '\nPuntaje de Calinski-Harabasz de esta iteración: ' + ("%.2f" % iteracionesH[clicked_row_index][3])
+                        strMayorIgual = '\nYa que ' + str(cambiaron) + ' < ' + str(umbral) +  ' (1% de ' + str(len(puntosUsados)) + '), entonces NO SE DEBE SEGUIR ITERANDO.'
+                    strTexto = strTexto + strMayorIgual + '\nEl puntaje de Calinski-Harabasz de esta iteración es de ' + ("%.2f" % iteracionesH[clicked_row_index][3])
                     window[4]['txtIterHeuristico'].update(strTexto)
         if i == 0 and active[i] == False:
          break

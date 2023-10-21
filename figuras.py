@@ -15,12 +15,12 @@ def estadoInicial(csv):
     limMaxY = maxY + ((maxY - minY) * 0.1)
     x = [punto[0] for punto in puntos]
     y = [punto[1] for punto in puntos]
-    ax.scatter(x, y, label = 'Punto sin agrupar' , color = [1, 1, 1], s = 20.0, edgecolors = 'black')   
+    ax.scatter(x, y, label = 'Punto sin agrupar' , color = [1, 1, 1], s = 20.0, edgecolors = 'black')
     ax.set_xlabel('Eje X')
     ax.set_ylabel('Eje Y')
     ax.set_xlim(limMinX, limMaxX)
     ax.set_ylim(limMinY, limMaxY)
-    ax.set_title('Dataset')
+    ax.set_title('Dataset seleccionado')
     ax.legend(loc='upper left', bbox_to_anchor=(1, 1))
     fig.tight_layout()
     return fig
@@ -79,6 +79,13 @@ def figFinalKmeans(k, puntos, iteracion):
     [1, 0, 1],
     [0, 1, 1]
     ]
+    coloresT = [
+    [1, 0, 0, 0.4],
+    [0, 1, 0, 0.4],
+    [0, 0, 1, 0.4],
+    [1, 0, 1, 0.4],
+    [0, 1, 1, 0.4]
+    ]
     fig, ax = plt.subplots()
     minX = min([punto[0] for punto in puntos])
     maxX = max([punto[0] for punto in puntos])
@@ -94,7 +101,7 @@ def figFinalKmeans(k, puntos, iteracion):
     for j, cluster in enumerate(clusters):
         x = [punto[0] for punto in cluster]
         y = [punto[1] for punto in cluster]
-        plt.scatter(x, y, label = 'Punto del clúster ' + str(j + 1), color = colores[j], s = 20.0, edgecolors = 'black')
+        plt.scatter(x, y, label = 'Punto del clúster ' + str(j + 1), color = coloresT[j], s = 20.0, edgecolors = 'black')
     for h, centroide in enumerate(centroides):
         x = centroide[0]
         y = centroide[1]
@@ -116,6 +123,13 @@ def figIteracionKmeans(puntos, iteraciones, k, i):
     [1, 0, 1],
     [0, 1, 1]
     ]
+    coloresT = [
+    [1, 0, 0, 0.4],
+    [0, 1, 0, 0.4],
+    [0, 0, 1, 0.4],
+    [1, 0, 1, 0.4],
+    [0, 1, 1, 0.4]
+    ]
     fig, ax = plt.subplots()
     minX = min([punto[0] for punto in puntos])
     maxX = max([punto[0] for punto in puntos])
@@ -131,7 +145,7 @@ def figIteracionKmeans(puntos, iteraciones, k, i):
     for j, cluster in enumerate(clusters):
         x = [punto[0] for punto in cluster]
         y = [punto[1] for punto in cluster]
-        plt.scatter(x, y, label = 'Punto del clúster ' + str(j + 1), color = colores[j], s = 20.0, edgecolors = 'black')
+        plt.scatter(x, y, label = 'Punto del clúster ' + str(j + 1), color = coloresT[j], s = 20.0, edgecolors = 'black')
     for h, centroide in enumerate(centroides):
         x = centroide[0]
         y = centroide[1]
