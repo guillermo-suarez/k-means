@@ -3,18 +3,17 @@ import random as rnd
 
 from funciones import calcularDistancia, getPuntoMedio, separarPorClusters, getCHScore
 
-def marcarCentroidesAleatorios(k, puntos, etiquetas):
+def getSemillasAleatorios(k, puntos):
     centroides = []
     n = len(puntos)
     for i in range(k):
         j = rnd.randint(0, n - 1)
-        while etiquetas[j] != 0:
+        while puntos[j] in centroides:
             j = rnd.randint(0, n - 1)
         centroides.append([puntos[j][0], puntos[j][1]])
-        etiquetas[j] = i + 1
-    return centroides, puntos, etiquetas
+    return centroides
 
-def marcarCentroidesHeuristica(k, puntos, etiquetas):
+def getSemillasHeuristica(k, puntos):
     centroides = []
     n = len(puntos)
     # PRIMER CENTROIDE: el punto mas lejano al centroide del dataset
@@ -25,7 +24,6 @@ def marcarCentroidesHeuristica(k, puntos, etiquetas):
         distancias_baricentro.append(distancia_al_baricentro)
     pto = distancias_baricentro.index(max(distancias_baricentro))
     centroides.append([puntos[pto][0], puntos[pto][1]])
-    etiquetas[pto] = 1
     # RESTO DE LOS CENTROIDES: el punto que maximice su distancia a su centroide mas cercano (de lo que se hayan definido hasta el momento)
     for i in range(1, k):        
         # Calculamos los siguientes centroides a partir de las distancias mínimas:
@@ -39,8 +37,7 @@ def marcarCentroidesHeuristica(k, puntos, etiquetas):
         # Seleccionamos el punto con mayor distancia al centroide    
         pto = distancias_minimas.index(max(distancias_minimas)) 
         centroides.append([puntos[pto][0], puntos[pto][1]])
-        etiquetas[pto] = i + 1
-    return centroides, puntos, etiquetas
+    return centroides
 
 def kMeans(k, puntos, etiquetas, centroides):
     iteraciones = []
