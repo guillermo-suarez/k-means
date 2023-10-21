@@ -195,7 +195,7 @@ def make_inicio():
                     else:
                         strMayorIgual = '\nYa que ' + str(cambiaron) + ' < ' + str(umbral) +  ' (%1 de ' + str(len(puntosUsados)) + '), entonces NO SE DEBE SEGUIR ITERANDO.'
                     strTexto = strTexto + strMayorIgual + '\nPuntaje de Calinski-Harabasz de esta iteración: ' + ("%.2f" % iteracionesH[clicked_row_index][3])
-                    window[3]['txtIterAleatorio'].update(strTexto)
+                    window[4]['txtIterHeuristico'].update(strTexto)
         if i == 0 and active[i] == False:
          break
     window0.close()
