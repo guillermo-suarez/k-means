@@ -171,6 +171,15 @@ def make_inicio():
                     figIter = figIteracionKmeans(puntosUsados, iteracionesA, kUsado, clicked_row_index)                    
                     fig_canvas_agg_iterA= FigureCanvasTkAgg(figIter, canvas_iterA)                    
                     fig_canvas_agg_iterA.get_tk_widget().pack(side='top', fill='both', expand=1)
+                    cambiaron = iteracionesA[clicked_row_index][2]
+                    umbral = round((len(puntosUsados) * 0.01) + 0.5)
+                    strTexto = str(cambiaron) + ' puntos/s cambiaron de clúster con respecto a la iteración anterior.\nEste dataset tiene ' + str(len(puntosUsados)) + ' puntos.'
+                    if cambiaron >= umbral:
+                        strMayorIgual = '\nYa que ' + str(cambiaron) + ' >= ' + str(umbral) +  ' (%1 de ' + str(len(puntosUsados)) + '), entonces SE DEBE SEGUIR ITERANDO.'
+                    else:
+                        strMayorIgual = '\nYa que ' + str(cambiaron) + ' < ' + str(umbral) +  ' (%1 de ' + str(len(puntosUsados)) + '), entonces NO SE DEBE SEGUIR ITERANDO.'
+                    strTexto = strTexto + strMayorIgual + '\nPuntaje de Calinski-Harabasz de esta iteración: ' + ("%.2f" % iteracionesA[clicked_row_index][3])
+                    window[3]['txtIterAleatorio'].update(strTexto)
                 elif event[i] == "IterHeuristico":
                     clicked_row_index = values[i][event[i]][0]   
                     if fig_canvas_agg_iterH != None:
@@ -178,7 +187,15 @@ def make_inicio():
                     figIter = figIteracionKmeans(puntosUsados, iteracionesH, kUsado, clicked_row_index)                    
                     fig_canvas_agg_iterH= FigureCanvasTkAgg(figIter, canvas_iterH)                    
                     fig_canvas_agg_iterH.get_tk_widget().pack(side='top', fill='both', expand=1)
-
+                    cambiaron = iteracionesH[clicked_row_index][2]
+                    umbral = round((len(puntosUsados) * 0.01) + 0.5)
+                    strTexto = str(cambiaron) + ' puntos/s cambiaron de clúster con respecto a la iteración anterior.\nEste dataset tiene ' + str(len(puntosUsados)) + ' puntos.'
+                    if cambiaron >= umbral:
+                        strMayorIgual = '\nYa que ' + str(cambiaron) + ' >= ' + str(umbral) +  ' (%1 de ' + str(len(puntosUsados)) + '), entonces SE DEBE SEGUIR ITERANDO.'
+                    else:
+                        strMayorIgual = '\nYa que ' + str(cambiaron) + ' < ' + str(umbral) +  ' (%1 de ' + str(len(puntosUsados)) + '), entonces NO SE DEBE SEGUIR ITERANDO.'
+                    strTexto = strTexto + strMayorIgual + '\nPuntaje de Calinski-Harabasz de esta iteración: ' + ("%.2f" % iteracionesH[clicked_row_index][3])
+                    window[3]['txtIterAleatorio'].update(strTexto)
         if i == 0 and active[i] == False:
          break
     window0.close()
@@ -195,7 +212,10 @@ def make_iteraciones(iteraciones, tipo):
     for i, iter in enumerate(iteraciones):
         fila = ["Iteración " + str(i)]
         valores.append(fila)
-    column=[[sg.Canvas(key='-figIteracion-')]]
+    column = [
+        [sg.Canvas(key='-figIteracion-')],
+        [sg.Text(key='txt' + tipo)]
+    ]
     layout = [[sg.Column(column, scrollable= False),
               [sg.Text(text='Iteraciones', font=('Calibri', 30), 
                justification= 'center')],                

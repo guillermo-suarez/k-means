@@ -90,8 +90,6 @@ def figFinalKmeans(k, puntos, iteracion):
     limMaxY = maxY + ((maxY - minY) * 0.1)
     centroides = iteracion[0]
     etiquetas = iteracion[1]
-    cambiaron = iteracion[2]
-    chScore = iteracion[3]
     clusters = separarPorClusters(k, puntos, etiquetas)
     for j, cluster in enumerate(clusters):
         x = [punto[0] for punto in cluster]
@@ -129,8 +127,6 @@ def figIteracionKmeans(puntos, iteraciones, k, i):
     limMaxY = maxY + ((maxY - minY) * 0.1)
     centroides = iteraciones[i][0]
     etiquetas = iteraciones[i][1]
-    cambiaron = iteraciones[i][2]
-    chScore = iteraciones[i][3]
     clusters = separarPorClusters(k, puntos, etiquetas)
     for j, cluster in enumerate(clusters):
         x = [punto[0] for punto in cluster]
@@ -145,14 +141,6 @@ def figIteracionKmeans(puntos, iteraciones, k, i):
     ax.set_xlim(limMinX, limMaxX)
     ax.set_ylim(limMinY, limMaxY)
     ax.legend(loc='upper left', bbox_to_anchor=(1, 1))
-    umbral = round((len(puntos) * 0.01) + 0.5)
     ax.set_title('Iteración ' + str(i))
-    strTexto = str(cambiaron) + ' puntos/s cambiaron de clúster con respecto a la iteración anterior.\nEste dataset tiene ' + str(len(puntos)) + ' puntos.'
-    if cambiaron >= umbral:
-        strMayorIgual = '\nYa que ' + str(cambiaron) + ' >= ' + str(umbral) +  ' (%1 de ' + str(len(puntos)) + '), entonces SE DEBE SEGUIR ITERANDO.'
-    else:
-        strMayorIgual = '\nYa que ' + str(cambiaron) + ' < ' + str(umbral) +  ' (%1 de ' + str(len(puntos)) + '), entonces NO SE DEBE SEGUIR ITERANDO.'
-    strTexto = strTexto + strMayorIgual + '\nPuntaje de Calinski-Harabasz de esta iteración: ' + ("%.2f" % chScore)
-    fig.text(x = 0.1, y = 0.0, s = strTexto)
     fig.tight_layout()
     return fig
