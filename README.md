@@ -8,7 +8,7 @@
 
 ## Descargar entregas del TPI
 
-La primer entrega (23/05/2023) esta disponible para su descarga en [esta carpeta de Drive](https://drive.google.com/drive/folders/1E_ET-FEJsNau_4Mm7D0S84Hf4RDYErfU?usp=share_link).
+La primer entrega (23/10/2023) esta disponible para su descarga en [esta carpeta de Drive](https://drive.google.com/drive/folders/1E_ET-FEJsNau_4Mm7D0S84Hf4RDYErfU?usp=share_link).
 
 ## Instrucciones para ejecutar el programa desde el archivo ejecutable .exe (sólo Windows)
 
