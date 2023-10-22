@@ -1,5 +1,4 @@
 import csv
-import math as m
 
 def abrirCSV(path: str):
     with open(path, 'r') as dataset:

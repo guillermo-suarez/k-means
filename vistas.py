@@ -197,7 +197,7 @@ def make_inicio():
                     strTexto = strTexto + strMayorIgual + '\nEl puntaje de Calinski-Harabasz de esta iteración es de ' + ("%.2f" % iteracionesH[clicked_row_index][3])
                     window[4]['txtIterHeuristico'].update(strTexto)
         if i == 0 and active[i] == False:
-         break
+            break
     window0.close()
 
 def move_center(window, mover):
