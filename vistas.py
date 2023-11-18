@@ -254,10 +254,10 @@ def make_inicio():
                     figInicialH, figFinalH, iteracionesH, kUsado, puntosUsados = figsKmeans(values[0]['file_path'], k, 'h')
                     figInicialA, figFinalA, iteracionesA, kUsado, puntosUsados = figsKmeans(values[0]['file_path'], k, 'a')
                     columnAH = [  
-                        [sg.Text(text='Inicialización Heurística')],
+                        [sg.Text(text='Inicialización Heurística', font=('Calibri', 15), size= 15, expand_x= True, justification= 'center')],
                         [sg.Canvas(key='-figInicialH-'),
                         sg.Canvas(key='-figFinalH-'), sg.Text(text = 'Total de iteraciones: ' + str(len(iteracionesH))), sg.Button(button_text = 'Ver Iteraciones Heurísticas')],
-                        [sg.Text(text='Inicialización Aleatoria')],
+                        [sg.Text(text='Inicialización Aleatoria', font=('Calibri', 15), size= 15, expand_x= True, justification= 'center')],
                         [sg.Canvas(key='-figInicialA-'),
                         sg.Canvas(key='-figFinalA-'), sg.Text(text = 'Total de iteraciones: ' + str(len(iteracionesA))), sg.Button(button_text = 'Ver Iteraciones Aleatorias')]]
                     w, h = getScreenSize()
