@@ -49,7 +49,7 @@ def kMeans(k, puntos, etiquetas, centroides):
         for i, punto in enumerate(puntos):
             # ...calculamos las distancias con todos los otros centroides
             distancias = [calcularDistancia(centroide, punto) for centroide in centroides]
-            # Buscamos, entre todas esas distancias, la más chica e identificamos a que clúster ahora pertenecería el punto
+            # Buscamos, entre todas esas distancias, la más chica e identificamos a que cluster ahora pertenecería el punto
             for j, distancia in enumerate(distancias):
                 if distancia == min(distancias):
                     nroClusterMin = j + 1

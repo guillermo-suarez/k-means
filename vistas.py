@@ -2,6 +2,7 @@ import PySimpleGUI as sg
 import pyautogui
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from figuras import estadoInicial, figsKmeans, figIteracionKmeans
+from funciones import separarPorClusters
 import os
 
 
@@ -171,14 +172,32 @@ def make_inicio():
                     figIter = figIteracionKmeans(puntosUsados, iteracionesA, kUsado, clicked_row_index)                    
                     fig_canvas_agg_iterA= FigureCanvasTkAgg(figIter, canvas_iterA)                    
                     fig_canvas_agg_iterA.get_tk_widget().pack(side='top', fill='both', expand=1)
+                    strTexto = 'Este dataset tiene ' + str(len(puntosUsados)) + ' puntos'
+                    clusters = separarPorClusters(k, puntosUsados, iteracionesA[clicked_row_index][1])
+                    for i, cluster in enumerate(clusters):
+                        strCluster = '\n\tEl cluster ' + str(i + 1) + ' tiene ' + str(len(cluster)) + ' puntos ' + f'({((len(cluster)/len(puntosUsados))*100.0):.2f}%)'
+                        strTexto = strTexto + strCluster
                     cambiaron = iteracionesA[clicked_row_index][2]
+                    strCambiaron = '\n\n' + str(cambiaron) + ' puntos/s cambiaron de cluster con respecto a la iteración anterior'
+                    strTexto = strTexto + strCambiaron
                     umbral = round((len(puntosUsados) * 0.01) + 0.5)
-                    strTexto = str(cambiaron) + ' puntos/s cambiaron de clúster con respecto a la iteración anterior.\nEste dataset tiene ' + str(len(puntosUsados)) + ' puntos.'
                     if cambiaron >= umbral:
-                        strMayorIgual = '\nYa que ' + str(cambiaron) + ' >= ' + str(umbral) +  ' (1% de ' + str(len(puntosUsados)) + '), entonces SE DEBE SEGUIR ITERANDO.'
+                        strMayorIgual = '\n\tYa que ' + str(cambiaron) + ' >= ' + str(umbral) +  ' (1% de ' + str(len(puntosUsados)) + '), entonces SE DEBE SEGUIR ITERANDO'
                     else:
-                        strMayorIgual = '\nYa que ' + str(cambiaron) + ' < ' + str(umbral) +  ' (1% de ' + str(len(puntosUsados)) + '), entonces NO SE DEBE SEGUIR ITERANDO.'
-                    strTexto = strTexto + strMayorIgual + '\nEl puntaje de Calinski-Harabasz de esta iteración es de ' + ("%.2f" % iteracionesA[clicked_row_index][3])
+                        strMayorIgual = '\n\tYa que ' + str(cambiaron) + ' < ' + str(umbral) +  ' (1% de ' + str(len(puntosUsados)) + '), entonces NO SE DEBE SEGUIR ITERANDO'
+                    strTexto = strTexto + strMayorIgual
+                    chScore = iteracionesA[clicked_row_index][3]
+                    strCHScore = '\n\nEl puntaje de Calinski-Harabasz de esta iteración es de ' + ("%.2f" % chScore)
+                    if clicked_row_index >= 1:
+                        chScoreAnt = iteracionesA[clicked_row_index - 1][3]
+                        strComparacion = '\n\tLa iteración anterior tuvo un puntaje de Calinski-Harabasz de ' + ("%.2f" % chScoreAnt)
+                        comparacion = ((chScore - chScoreAnt)/ chScoreAnt) * 100.0
+                        if comparacion >= 0.0:
+                            strComparacion = strComparacion + '\n\tEsto quiere decir que esta iteración MEJORÓ este puntaje en un ' + f'{comparacion:.2f}%'
+                        else:
+                            strComparacion = strComparacion + '\n\tEsto quiere decir que esta iteración EMPEORÓ este puntaje en un ' + f'{comparacion:.2f}%'
+                        strCHScore = strCHScore + strComparacion
+                    strTexto = strTexto + strCHScore
                     window[3]['txtIterAleatorio'].update(strTexto)
                 elif event[i] == "IterHeuristico":
                     clicked_row_index = values[i][event[i]][0]   
@@ -187,14 +206,32 @@ def make_inicio():
                     figIter = figIteracionKmeans(puntosUsados, iteracionesH, kUsado, clicked_row_index)                    
                     fig_canvas_agg_iterH= FigureCanvasTkAgg(figIter, canvas_iterH)                    
                     fig_canvas_agg_iterH.get_tk_widget().pack(side='top', fill='both', expand=1)
+                    strTexto = 'Este dataset tiene ' + str(len(puntosUsados)) + ' puntos'
+                    clusters = separarPorClusters(k, puntosUsados, iteracionesH[clicked_row_index][1])
+                    for i, cluster in enumerate(clusters):
+                        strCluster = '\n\tEl cluster ' + str(i + 1) + ' tiene ' + str(len(cluster)) + ' puntos ' + f'({((len(cluster)/len(puntosUsados))*100.0):.2f}%)'
+                        strTexto = strTexto + strCluster
                     cambiaron = iteracionesH[clicked_row_index][2]
+                    strCambiaron = '\n\n' + str(cambiaron) + ' puntos/s cambiaron de cluster con respecto a la iteración anterior'
+                    strTexto = strTexto + strCambiaron
                     umbral = round((len(puntosUsados) * 0.01) + 0.5)
-                    strTexto = str(cambiaron) + ' puntos/s cambiaron de clúster con respecto a la iteración anterior.\nEste dataset tiene ' + str(len(puntosUsados)) + ' puntos.'
                     if cambiaron >= umbral:
-                        strMayorIgual = '\nYa que ' + str(cambiaron) + ' >= ' + str(umbral) +  ' (1% de ' + str(len(puntosUsados)) + '), entonces SE DEBE SEGUIR ITERANDO.'
+                        strMayorIgual = '\n\tYa que ' + str(cambiaron) + ' >= ' + str(umbral) +  ' (1% de ' + str(len(puntosUsados)) + '), entonces SE DEBE SEGUIR ITERANDO'
                     else:
-                        strMayorIgual = '\nYa que ' + str(cambiaron) + ' < ' + str(umbral) +  ' (1% de ' + str(len(puntosUsados)) + '), entonces NO SE DEBE SEGUIR ITERANDO.'
-                    strTexto = strTexto + strMayorIgual + '\nEl puntaje de Calinski-Harabasz de esta iteración es de ' + ("%.2f" % iteracionesH[clicked_row_index][3])
+                        strMayorIgual = '\n\tYa que ' + str(cambiaron) + ' < ' + str(umbral) +  ' (1% de ' + str(len(puntosUsados)) + '), entonces NO SE DEBE SEGUIR ITERANDO'
+                    strTexto = strTexto + strMayorIgual
+                    chScore = iteracionesH[clicked_row_index][3]
+                    strCHScore = '\n\nEl puntaje de Calinski-Harabasz de esta iteración es de ' + ("%.2f" % chScore)
+                    if clicked_row_index >= 1:
+                        chScoreAnt = iteracionesH[clicked_row_index - 1][3]
+                        strComparacion = '\n\tLa iteración anterior tuvo un puntaje de Calinski-Harabasz de ' + ("%.2f" % chScoreAnt)
+                        comparacion = ((chScore - chScoreAnt)/ chScoreAnt) * 100.0
+                        if comparacion >= 0.0:
+                            strComparacion = strComparacion + '\n\tEsto quiere decir que esta iteración MEJORÓ este puntaje en un ' + f'{comparacion:.2f}%'
+                        else:
+                            strComparacion = strComparacion + '\n\tEsto quiere decir que esta iteración EMPEORÓ este puntaje en un ' + f'{comparacion:.2f}%'
+                        strCHScore = strCHScore + strComparacion
+                    strTexto = strTexto + strCHScore
                     window[4]['txtIterHeuristico'].update(strTexto)
         if i == 0 and active[i] == False:
             break

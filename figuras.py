@@ -60,7 +60,7 @@ def figInicialKmeans(puntos, etiquetas, k, tipo):
     for h, centroide in enumerate(centroides):
         x = centroide[0]
         y = centroide[1]
-        ax.scatter(x, y, label = 'Semilla del clúster ' + str(h + 1), color = colores[h], s = 100.0, edgecolors = 'black')
+        ax.scatter(x, y, label = 'Semilla ' + str(h + 1) + ' ' + f'({x:.2f}, {y:.2f})', color = colores[h], s = 100.0, edgecolors = 'black')
     ax.set_xlabel('Eje X')
     ax.set_ylabel('Eje Y')
     ax.set_xlim(limMinX, limMaxX)
@@ -101,11 +101,11 @@ def figFinalKmeans(k, puntos, iteracion):
     for j, cluster in enumerate(clusters):
         x = [punto[0] for punto in cluster]
         y = [punto[1] for punto in cluster]
-        plt.scatter(x, y, label = 'Punto del clúster ' + str(j + 1), color = coloresT[j], s = 20.0, edgecolors = 'black')
+        plt.scatter(x, y, label = 'Punto del cluster ' + str(j + 1), color = coloresT[j], s = 20.0, edgecolors = 'black')
     for h, centroide in enumerate(centroides):
         x = centroide[0]
         y = centroide[1]
-        plt.scatter(x, y, label = 'Centroide del clúster ' + str(h + 1), color = colores[h], s = 100.0, edgecolors = 'black')
+        plt.scatter(x, y, label = 'Centroide ' + str(h + 1) + ' ' + f'({x:.2f}, {y:.2f})', color = colores[h], s = 100.0, edgecolors = 'black')
     ax.set_xlabel('Eje X')
     ax.set_ylabel('Eje Y')
     ax.set_xlim(limMinX, limMaxX)
@@ -145,11 +145,11 @@ def figIteracionKmeans(puntos, iteraciones, k, i):
     for j, cluster in enumerate(clusters):
         x = [punto[0] for punto in cluster]
         y = [punto[1] for punto in cluster]
-        plt.scatter(x, y, label = 'Punto del clúster ' + str(j + 1), color = coloresT[j], s = 20.0, edgecolors = 'black')
+        plt.scatter(x, y, label = 'Punto del cluster ' + str(j + 1), color = coloresT[j], s = 20.0, edgecolors = 'black')
     for h, centroide in enumerate(centroides):
         x = centroide[0]
         y = centroide[1]
-        plt.scatter(x, y, label = 'Centroide del clúster ' + str(h + 1), color = colores[h], s = 100.0, edgecolors = 'black')
+        plt.scatter(x, y, label = 'Centroide ' + str(h + 1) + ' ' + f'({x:.2f}, {y:.2f})', color = colores[h], s = 100.0, edgecolors = 'black')
     ax.set_xlabel('Eje X')
     ax.set_ylabel('Eje Y')
     ax.set_xlim(limMinX, limMaxX)
