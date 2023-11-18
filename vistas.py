@@ -252,16 +252,13 @@ def make_inicio():
                 elif event[i] == 'Ambas' and active[5] == False:
                     k = int(values[0]['k'])
                     figInicialH, figFinalH, iteracionesH, kUsado, puntosUsados = figsKmeans(values[0]['file_path'], k, 'h')
-                    figInicialA, figFinalA, iteracionesA, kUsado, puntosUsados = figsKmeans(values[0]['file_path'], k, 'a')
-                    columnAH = [  
-                        [sg.Text(text='Inicialización Heurística', font=('Calibri', 15), size= 15, expand_x= True, justification= 'center')],
+                    figInicialA, figFinalA, iteracionesA, kUsado, puntosUsados = figsKmeans(values[0]['file_path'], k, 'a')            
+                    layoutAH = [ [sg.Text(text='Inicialización Heurística', font=('Calibri', 15), size= 15, expand_x= True, justification= 'center')],
                         [sg.Canvas(key='-figInicialH-'),
                         sg.Canvas(key='-figFinalH-'), sg.Text(text = 'Total de iteraciones: ' + str(len(iteracionesH))), sg.Button(button_text = 'Ver Iteraciones Heurísticas')],
                         [sg.Text(text='Inicialización Aleatoria', font=('Calibri', 15), size= 15, expand_x= True, justification= 'center')],
                         [sg.Canvas(key='-figInicialA-'),
                         sg.Canvas(key='-figFinalA-'), sg.Text(text = 'Total de iteraciones: ' + str(len(iteracionesA))), sg.Button(button_text = 'Ver Iteraciones Aleatorias')]]
-                    w, h = getScreenSize()
-                    layoutAH = [[sg.Column(columnAH, scrollable=True,  vertical_scroll_only=True, size=(w,h)),]]
                     window[5] =  sg.Window('Comparación', layoutAH, finalize=True, element_justification='c')                    
                     active[5] = True
                     canvas_elem_Inicial_A = window[5]['-figInicialA-']
