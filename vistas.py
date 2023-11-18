@@ -73,18 +73,19 @@ def make_inicio():
     layout = [  [sg.Canvas(key='-CANVAS-')],
                 [sg.Column(column, scrollable= False)],
                 [sg.Button(button_text='Inicialización Aleatoria', key='Aleatoria', disabled=not csv_insertado),
-                 sg.Button(button_text='Inicialización Heurística', key='Heuristica', disabled=not csv_insertado)]]
+                 sg.Button(button_text='Inicialización Heurística', key='Heuristica', disabled=not csv_insertado),
+                 sg.Button(button_text='Comparar Ambas', key='Ambas', disabled=not csv_insertado)]]
 
     window0 = sg.Window('Inicio', layout, finalize=True, element_justification='c')
-    window  = [window0, None, None, None, None]
-    active  = [True, False, False, False, False]
-    event   = [None, None, None, None, None]
-    values  = [None, None, None, None, None]
+    window  = [window0, None, None, None, None, None]
+    active  = [True, False, False, False, False, False]
+    event   = [None, None, None, None, None, None]
+    values  = [None, None, None, None, None, None]
     canvas_elem = window[0]['-CANVAS-']
     canvas = canvas_elem.Widget
     fig_canvas_agg= None
     while True:              
-        for i in range(5):
+        for i in range(6):
              if active[i] and window[i] != None:
                 event[i], values[i] = window[i].read(timeout=50)
                 if event[i] == sg.WIN_CLOSED or event[i] == 'Salir':
@@ -112,6 +113,7 @@ def make_inicio():
                         csv_insertado = True
                         window0['Aleatoria'].update(disabled=False)
                         window0['Heuristica'].update(disabled=False)
+                        window0['Ambas'].update(disabled=False)
                 elif event[i] == 'Aleatoria' and not active[1]: 
                     k = int(values[0]['k'])
                     figInicial, figFinal, iteracionesA, kUsado, puntosUsados = figsKmeans(values[0]['file_path'], k, 'a')
@@ -165,6 +167,20 @@ def make_inicio():
                         canvas_elem_iterH = window[4]['-figIteracion-']
                         canvas_iterH = canvas_elem_iterH.Widget
                         fig_canvas_agg_iterH= None
+                elif event[i] == "Ver Iteraciones Heurísticas" and not active[4]:
+                        layoutIter = make_iteraciones(iteracionesH, "IterHeuristico")
+                        window[4] =  sg.Window('Iteraciones con Inicialización Heurística', layoutIter, finalize=True, element_justification='c')     
+                        active[4] = True
+                        canvas_elem_iterH = window[4]['-figIteracion-']
+                        canvas_iterH = canvas_elem_iterH.Widget
+                        fig_canvas_agg_iterH= None
+                elif event[i] == "Ver Iteraciones Aleatorias" and not active[3]:
+                        layoutIter = make_iteraciones(iteracionesA, "IterAleatorio")                        
+                        window[3] =  sg.Window('Iteraciones con Inicialización Aleatoria', layoutIter, finalize=True, element_justification='c') 
+                        active[3] = True   
+                        canvas_elem_iterA = window[3]['-figIteracion-']
+                        canvas_iterA = canvas_elem_iterA.Widget
+                        fig_canvas_agg_iterA= None
                 elif event[i] == "IterAleatorio":                    
                     clicked_row_index = values[i][event[i]][0]
                     if fig_canvas_agg_iterA != None:
@@ -233,6 +249,38 @@ def make_inicio():
                         strCHScore = strCHScore + strComparacion
                     strTexto = strTexto + strCHScore
                     window[4]['txtIterHeuristico'].update(strTexto)
+                elif event[i] == 'Ambas' and active[5] == False:
+                    k = int(values[0]['k'])
+                    figInicialH, figFinalH, iteracionesH, kUsado, puntosUsados = figsKmeans(values[0]['file_path'], k, 'h')
+                    figInicialA, figFinalA, iteracionesA, kUsado, puntosUsados = figsKmeans(values[0]['file_path'], k, 'a')
+                    columnAH = [  
+                        [sg.Text(text='Inicialización Heurística')],
+                        [sg.Canvas(key='-figInicialH-'),
+                        sg.Canvas(key='-figFinalH-'), sg.Text(text = 'Total de iteraciones: ' + str(len(iteracionesH))), sg.Button(button_text = 'Ver Iteraciones Heurísticas')],
+                        [sg.Text(text='Inicialización Aleatoria')],
+                        [sg.Canvas(key='-figInicialA-'),
+                        sg.Canvas(key='-figFinalA-'), sg.Text(text = 'Total de iteraciones: ' + str(len(iteracionesA))), sg.Button(button_text = 'Ver Iteraciones Aleatorias')]]
+                    w, h = getScreenSize()
+                    layoutAH = [[sg.Column(columnAH, scrollable=True,  vertical_scroll_only=True, size=(w,h)),]]
+                    window[5] =  sg.Window('Comparación', layoutAH, finalize=True, element_justification='c')                    
+                    active[5] = True
+                    canvas_elem_Inicial_A = window[5]['-figInicialA-']
+                    canvas_Inicial_A = canvas_elem_Inicial_A.Widget
+                    fig_canvas_agg_inicial_A= FigureCanvasTkAgg(figInicialA, canvas_Inicial_A)
+                    fig_canvas_agg_inicial_A.get_tk_widget().pack(side='top', fill='both', expand=1)   
+                    canvas_elem_Inicial_H = window[5]['-figInicialH-']
+                    canvas_Inicial_H = canvas_elem_Inicial_H.Widget
+                    fig_canvas_agg_inicial_H= FigureCanvasTkAgg(figInicialH, canvas_Inicial_H)
+                    fig_canvas_agg_inicial_H.get_tk_widget().pack(side='top', fill='both', expand=1) 
+                    canvas_elem_Final_A = window[5]['-figFinalA-']
+                    canvas_Final_A = canvas_elem_Final_A.Widget
+                    fig_canvas_agg_Final_A= FigureCanvasTkAgg(figFinalA, canvas_Final_A)
+                    fig_canvas_agg_Final_A.get_tk_widget().pack(side='top', fill='both', expand=1)   
+                    canvas_elem_Final_H = window[5]['-figFinalH-']
+                    canvas_Final_H = canvas_elem_Final_H.Widget
+                    fig_canvas_agg_Final_H= FigureCanvasTkAgg(figFinalH, canvas_Final_H)
+                    fig_canvas_agg_Final_H.get_tk_widget().pack(side='top', fill='both', expand=1)   
+                    move_center(window[5], 5)
         if i == 0 and active[i] == False:
             break
     window0.close()
